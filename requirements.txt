@@ -1,0 +1,2 @@
+-r serverless_requirements.txt
+Flask==1.1.1
