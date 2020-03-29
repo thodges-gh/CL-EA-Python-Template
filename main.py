@@ -1,15 +1,16 @@
 import json
-import requests
+from bridge import Bridge
 
 
 def create_request(input):
+    bridge = Bridge()
     try:
         params = {
             'fsym': input['data']['from'],
             'tsyms': input['data']['to']
         }
-        response = requests.get('https://min-api.cryptocompare.com/data/price',
-                                params)
+        response = bridge.request(
+            'https://min-api.cryptocompare.com/data/price', params)
         data = response.json()
         data['result'] = data[input['data']['to']]
         return {
@@ -17,10 +18,10 @@ def create_request(input):
             'data': data,
             'statusCode': 200
         }
-    except requests.exceptions.RequestException as e:
-        return adapter_error(input['id'], e.message)
-    except Exception:
-        return adapter_error(input['id'], 'There was an error')
+    except Exception as e:
+        return adapter_error(input['id'], f'There was an error: {e}')
+    finally:
+        bridge.close()
 
 
 def adapter_error(job_run_id, error):
