@@ -10,7 +10,9 @@ def adapter_setup(test_data):
 
 
 @pytest.mark.parametrize('test_data', [
+    {'id': job_run_id, 'data': {'base': 'ETH', 'quote': 'USD'}},
     {'id': job_run_id, 'data': {'from': 'ETH', 'to': 'USD'}},
+    {'id': job_run_id, 'data': {'coin': 'ETH', 'market': 'USD'}},
 ])
 def test_create_request_success(test_data):
     result = adapter_setup(test_data)
