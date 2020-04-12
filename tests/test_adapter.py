@@ -14,9 +14,11 @@ def adapter_setup(test_data):
 ])
 def test_create_request_success(test_data):
     result = adapter_setup(test_data)
+    print(result)
     assert result['statusCode'] == 200
     assert result['jobRunID'] == job_run_id
     assert result['data'] is not None
+    assert type(result['result']) is float
     assert type(result['data']['result']) is float
 
 
@@ -27,6 +29,7 @@ def test_create_request_success(test_data):
 ])
 def test_create_request_error(test_data):
     result = adapter_setup(test_data)
+    print(result)
     assert result['statusCode'] == 500
     assert result['jobRunID'] == job_run_id
     assert result['status'] == 'errored'

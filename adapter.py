@@ -8,18 +8,31 @@ class Adapter:
     def __init__(self, input):
         self.id = input.get('id', '1')
         self.request_data = input.get('data')
-        self.bridge = Bridge()
-        self.create_request()
+        if self.validate_request_data():
+            self.bridge = Bridge()
+            self.create_request()
+        else:
+            self.result_error('No data provided')
+
+    def validate_request_data(self):
+        if self.request_data is None:
+            return False
+        if self.request_data == {}:
+            return False
+        return True
 
     def create_request(self):
+        from_param = self.request_data.get('from', '')
+        to_param = self.request_data.get('to', '')
         try:
             params = {
-                'fsym': self.request_data.get('from', ''),
-                'tsyms': self.request_data.get('to', ''),
+                'fsym': from_param,
+                'tsyms': to_param,
             }
             response = self.bridge.request(self.base_url, params)
             data = response.json()
-            data['result'] = data[self.request_data['to']]
+            self.result = data[to_param]
+            data['result'] = self.result
             self.result_success(data)
         except Exception as e:
             self.result_error(e)
@@ -30,6 +43,7 @@ class Adapter:
         self.result = {
             'jobRunID': self.id,
             'data': data,
+            'result': self.result,
             'statusCode': 200,
         }
 
