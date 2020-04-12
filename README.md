@@ -5,13 +5,13 @@ This template shows a basic usecase of an external adapter written in Python for
 ## Install
 
 ```
-pip3 install -r requirements.txt
+pipenv install
 ```
 
 ## Test
 
 ```
-python3 -m unittest tests/test_main.py
+pipenv run pytest
 ```
 
 ## Run with Docker
@@ -33,9 +33,9 @@ docker run -it -p 8080:8080 cl-ea
 ### Create the zip
 
 ```bash
-pip3 install --system --target ./package -r serverless_requirements.txt
-cd package && zip -r ../cl-ea.zip . && cd ..
-zip -g cl-ea.zip main.py
+pipenv lock -r > requirements.txt
+pipenv run pip install -r requirements.txt -t ./package
+pipenv run python -m zipfile -c cl-ea.zip main.py adapter.py bridge.py ./package/*
 ```
 
 ### Install to AWS Lambda
@@ -51,11 +51,36 @@ zip -g cl-ea.zip main.py
 - Change the Handler to `main.lambda_handler`
 - Save
 
+#### To Set Up an API Gateway
 
-### Install to GCP
+An API Gateway is necessary for the function to be called by external services. You will need to disable the Lambda proxy integration for this to work as expected. This only has to be completed once, then all future adapters can simply use the same API Gateway.
 
-- In Functions, create a new function, choose to ZIP upload
+- Click Add Trigger
+- Select API Gateway in Trigger configuration
+- Under API, click Create an API
+- Choose REST API
+- Select the security for the API
+- Click Add
+- Click the API Gateway trigger
+- Click the name of the trigger (this is a link, a new window opens)
+- Click Integration Request
+- Uncheck Use Lamba Proxy integration
+- Click OK on the two dialogs
+- Return to your function
+- Remove the API Gateway and Save
+- Click Add Trigger and use the same API Gateway
+- Select the deployment stage and security
+- Click Add
+
+
+### Install to Google Cloud Funcions
+
+- In Functions, create a new function
+- Use HTTP for the Trigger
+- Optionally check the box to allow unauthenticated invocations
+- Choose ZIP upload under Source Code
 - Use Python 3.7 for the runtime
 - Click Browse and select the `cl-ea.zip` file
 - Select a Storage Bucket to keep the zip in
 - Function to execute: `gcs_handler`
+- Click Create

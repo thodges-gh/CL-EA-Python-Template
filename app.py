@@ -1,7 +1,6 @@
-# coding: utf-8
 from flask import Flask, request, jsonify
 
-import main as external_adapter
+from adapter import Adapter
 
 app = Flask(__name__)
 
@@ -14,11 +13,11 @@ def log_request_info():
 
 @app.route('/', methods=['POST'])
 def call_adapter():
-    test_data = request.get_json()
-    if test_data == '':
-        test_data = {}
-    result = external_adapter.create_request(test_data)
-    return jsonify(result)
+    data = request.get_json()
+    if data == '':
+        data = {}
+    adapter = Adapter(data)
+    return jsonify(adapter.result)
 
 
 if __name__ == '__main__':
