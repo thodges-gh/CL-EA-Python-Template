@@ -53,7 +53,7 @@ pipenv run python -m zipfile -c cl-ea.zip main.py adapter.py bridge.py ./package
 
 #### To Set Up an API Gateway
 
-An API Gateway is necessary for the function to be called by external services. You will need to disable the Lambda proxy integration for this to work as expected. This only has to be completed once, then all future adapters can simply use the same API Gateway.
+An API Gateway is necessary for the function to be called by external services.
 
 - Click Add Trigger
 - Select API Gateway in Trigger configuration
