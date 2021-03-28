@@ -2,7 +2,6 @@ import cv2
 import numpy as np
 
 from flask import Flask, request, jsonify
-from adapter import Adapter
 from image_checker import ImageChecker
 
 from PIL import Image
