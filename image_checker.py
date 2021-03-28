@@ -78,5 +78,5 @@ class ImageChecker:
             self.hash_dict[hash_type][hash] = message
 
     def get_image_score(self, image):
-        return 1 - self.find_closest_distance(image)
+        return self.find_closest_distance(image)
 
