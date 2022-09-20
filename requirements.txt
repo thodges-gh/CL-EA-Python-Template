@@ -8,5 +8,5 @@ itsdangerous==1.1.0
 jinja2==2.11.1
 markupsafe==1.1.1
 requests==2.23.0
-urllib3==1.25.8
+urllib3==1.26.5
 werkzeug==1.0.1
